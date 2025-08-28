@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преподавателю. От Андрея.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. Переменные и Базовые Настройки (Архитектурный Минимализм) --- */
+        :root {
+            /* Светлая тема: Чистота и Контраст */
+            --bg-color: #fdfdfd;
+            --text-color: #111111;
+            --border-color: #e0e0e0;
+            /* Яркий акцент (Electric Blue) */
+            --accent-color: #0055ff;
+            --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Автоматическое переключение на темную тему, если она включена в системе */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Темная тема: Глубина и Элегантность */
+                --bg-color: #111111;
+                --text-color: #fdfdfd;
+                --border-color: #333333;
+                --accent-color: #4d94ff;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-weight: 300; /* Light weight для основного текста */
+            overflow-x: hidden;
+            /* Оптимизация рендеринга текста */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- 2. Макет и Структура --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        section {
+            padding: 15vh 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .grid-layout {
+            display: grid;
+            /* Двухколоночный макет для баланса */
+            grid-template-columns: 1fr 2fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- 3. Типографика и Анимации Текста --- */
+        h1, h2 {
+            font-weight: 800; /* ExtraBold */
+            line-height: 1.1;
+        }
+
+        h1 {
+            font-size: clamp(4rem, 8vw, 6rem);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--accent-color);
+            /* "Прилипающий" заголовок секции */
+            position: sticky;
+            top: 50px;
+        }
+
+        .content p {
+            margin-bottom: 1.5em;
+            max-width: 700px;
+        }
+        
+        /* Сложная Анимация появления текста (Staggered Reveal) */
+        /* Элементы текста (слова) оборачиваются в span с помощью JS */
+        .reveal-text .word {
+            /* Скрываем текст за пределами родительского блока */
+            display: inline-block;
+            overflow: hidden;
+            vertical-align: bottom;
+        }
+
+        .reveal-text span span {
+            /* Начальное состояние: смещено вниз и прозрачно */
+            display: inline-block;
+            transform: translateY(100%);
+            opacity: 0;
+            /* Плавный и быстрый переход (Snappy). Используем только GPU-ускоренные свойства. */
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        /* Состояние видимости (добавляется через JS) */
+        .reveal-text.visible span span {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* --- 4. Компоненты и Видео --- */
+        .video-container {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            background-color: #000;
+            /* Добавляем data-speed для параллакса */
+        }
+
+        video {
+            width: 100%;
+            display: block;
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Легкий эффект масштабирования при наведении */
+        .video-container:hover video {
+            transform: scale(1.02);
+        }
+        
+        /* Оптимизированная анимация появления для блоков */
+        .reveal-block {
+             opacity: 0;
+             transform: translateY(60px);
+             transition: opacity 1s cubic-bezier(0.165, 0.84, 0.44, 1), transform 1s cubic-bezier(0.165, 0.84, 0.44, 1);
+             will-change: transform, opacity; /* Оптимизация производительности */
+        }
+        
+        .reveal-block.visible {
+             opacity: 1;
+             transform: translateY(0);
+        }
+        
+
+        /* --- 5. Интерактивная Визуализация (Vector Field) --- */
+        #vectorFieldCanvas {
+            width: 100%;
+            height: 80vh;
+            display: block;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        /* --- 6. Подвал --- */
+        footer {
+            text-align: center;
+            padding: 100px 0 50px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main>
+        
+        <section class="hero">
+            <div class="container">
+                <h1 class="reveal-text" data-stagger-type="word">Искреннее.<br>Извинение.</h1>
+            </div>
+        </section>
+
+        <section>
+            <div class="container grid-layout">
+                <h2 class="reveal-text" data-stagger-type="word">Анализ Ситуации</h2>
+                <div class="content">
+                    <div class="reveal-text" data-stagger-type="word">
+                        <p>Уважаемый Преподаватель.</p>
+                        <p>Я хочу принести свои извинения за инцидент на нашем занятии. Использование войс-мода было глупым, неуважительным и абсолютно неприемлемым поступком.</p>
+                        <p>Я понимаю, что потратил Ваше время и подорвал доверие. Мне стыдно за своё поведение. Я ценю Ваш труд и знания, которые Вы даете, и я осознал свою ошибку.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container grid-layout">
+                <h2 class="reveal-text" data-stagger-type="word">Видео Обращение</h2>
+                <div class="content">
+                    <div class="video-container reveal-block" data-speed="1.05">
+                        <video controls preload="metadata">
+                            <source src="./A_video_of_202508281149_ksc5h.mp4" type="video/mp4">
+                            Ваш браузер не поддерживает воспроизведение видео.
+                        </video>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container grid-layout">
+                <h2 class="reveal-text" data-stagger-type="word">Уважение к Сложности</h2>
+                <div class="content">
+                    <div class="reveal-text" data-stagger-type="word">
+                        <p>Математика — это язык точности и логики. Я отношусь к этому серьезно, несмотря на моё поведение.</p>
+                        <p>Ниже представлена визуализация Векторного Поля (Vector Field), где движение частиц определяется сложными тригонометрическими функциями. Оно интерактивно и реагирует на курсор.</p>
+                    </div>
+                    <div class="reveal-block" data-speed="0.95">
+                        <canvas id="vectorFieldCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container grid-layout">
+                <h2 class="reveal-text" data-stagger-type="word">Заключение</h2>
+                <div class="content">
+                    <div class="reveal-text" data-stagger-type="word">
+                        <p>Я обещаю, что подобное больше никогда не повторится.</p>
+                        <p>Надеюсь, Вы сможете дать мне второй шанс продолжить обучение.</p>
+                        <p>С уважением, Андрей.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Сайт создан Андреем. 2025.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // =================================================================
+            // 1. Анимация Появления Текста (Staggered Text Reveal)
+            // =================================================================
+            
+            // Функция для разделения текста на слова и оборачивания их в span
+            const splitText = (element) => {
+                const text = element.innerText;
+                element.innerHTML = '';
+
+                text.split(' ').forEach(word => {
+                    if (word.trim() === '') return;
+                    // Создаем внешний span (word wrapper) для overflow: hidden
+                    const wordWrapper = document.createElement('span');
+                    wordWrapper.classList.add('word');
+                    // Создаем внутренний span для анимации transform: translateY
+                    const innerSpan = document.createElement('span');
+                    innerSpan.textContent = word;
+                    wordWrapper.appendChild(innerSpan);
+                    element.appendChild(wordWrapper);
+                    // Добавляем пробел после слова
+                    element.appendChild(document.createTextNode(' '));
+                });
+            };
+
+            const revealTextElements = document.querySelectorAll('.reveal-text');
+            revealTextElements.forEach(splitText);
+
+            // --- 1.2. Intersection Observer для запуска анимаций (Оптимизация) ---
+            const observerOptions = {
+                root: null,
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        target.classList.add('visible');
+                        
+                        // Если это текст, применяем задержку (stagger) к внутренним span
+                        if (target.classList.contains('reveal-text')) {
+                            const spans = target.querySelectorAll('.word span');
+                            spans.forEach((span, index) => {
+                                // Быстрая задержка (0.03s на элемент) для snappy эффекта
+                                span.style.transitionDelay = `${index * 0.03}s`;
+                            });
+                        }
+                        
+                        observer.unobserve(target);
+                    }
+                });
+            }, observerOptions);
+
+            // Наблюдаем за текстовыми и блочными элементами
+            revealTextElements.forEach(el => observer.observe(el));
+            document.querySelectorAll('.reveal-block').forEach(el => observer.observe(el));
+            
+
+            // =================================================================
+            // 2. Плавный Параллакс (Оптимизированный)
+            // =================================================================
+            const parallaxElements = document.querySelectorAll('[data-speed]');
+
+            const handleScroll = () => {
+                // Используем requestAnimationFrame для максимальной плавности и производительности
+                requestAnimationFrame(() => {
+                    const scrollY = window.scrollY;
+                    
+                    parallaxElements.forEach(el => {
+                        const speed = parseFloat(el.getAttribute('data-speed'));
+                        // Рассчитываем смещение на основе скорости относительно скорости прокрутки
+                        // Используем отрицательное значение для создания эффекта глубины
+                        const translateY = scrollY * (1 - speed) * -0.3;
+
+                        // Применяем трансформацию. Используем translate3d для аппаратного ускорения.
+                        el.style.transform = `translate3d(0, ${translateY}px, 0)`;
+                    });
+                });
+            };
+
+            // passive: true улучшает производительность прокрутки
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            handleScroll();
+
+
+            // =================================================================
+            // 3. Интерактивная Визуализация: Поле Векторов (Vector Field)
+            // =================================================================
+            
+            class VectorFieldVisualization {
+                constructor(canvasId) {
+                    this.canvas = document.getElementById(canvasId);
+                    this.ctx = this.canvas.getContext('2d');
+                    this.particles = [];
+                    this.numParticles = 3000; // Большое количество для плотности, но оптимизированное
+                    this.time = 0;
+                    this.mouse = { x: null, y: null, radius: 100 };
+                    this.animationFrameId = null;
+                    this.isActive = false;
+
+                    this.setupCanvas();
+                    this.initParticles();
+                    this.setupInteractions();
+                }
+
+                setupCanvas() {
+                    // Настройка Canvas с учетом High-DPI (Retina) для четкости
+                    const dpr = window.devicePixelRatio || 1;
+                    const rect = this.canvas.getBoundingClientRect();
+                    this.canvas.width = rect.width * dpr;
+                    this.canvas.height = rect.height * dpr;
+                    this.ctx.scale(dpr, dpr);
+                    this.width = rect.width;
+                    this.height = rect.height;
+                    
+                    this.initParticles(); // Переинициализируем частицы при изменении размера
+                }
+
+                initParticles() {
+                    this.particles = [];
+                    for (let i = 0; i < this.numParticles; i++) {
+                        this.particles.push({
+                            x: Math.random() * this.width,
+                            y: Math.random() * this.height,
+                            vx: 0,
+                            vy: 0,
+                            maxSpeed: 3,
+                            // Цвет (используем HSL). От синего до фиолетового.
+                            hue: Math.random() * 60 + 200 
+                        });
+                    }
+                }
+
+                setupInteractions() {
+                    window.addEventListener('resize', () => this.setupCanvas());
+
+                    // Взаимодействие с мышью
+                    this.canvas.addEventListener('mousemove', (e) => {
+                        const rect = this.canvas.getBoundingClientRect();
+                        this.mouse.x = e.clientX - rect.left;
+                        this.mouse.y = e.clientY - rect.top;
+                    });
+                    this.canvas.addEventListener('mouseleave', () => {
+                        this.mouse.x = null;
+                        this.mouse.y = null;
+                    });
+
+                    // Оптимизация производительности: Запуск только при видимости
+                    const observer = new IntersectionObserver((entries) => {
+                        if (entries[0].isIntersecting) {
+                            this.start();
+                        } else {
+                            this.stop();
+                        }
+                    }, { threshold: 0.1 });
+                    observer.observe(this.canvas);
+                }
+
+                // Функция, определяющая Векторное Поле (Математическое ядро)
+                getVector(x, y) {
+                    // Используем сложные тригонометрические функции для создания потоков
+                    // Масштабируем координаты и добавляем время для динамики
+                    const scaledX = x * 0.01;
+                    const scaledY = y * 0.01;
+                    const t = this.time * 0.1;
+
+                    // Комбинация синусов и косинусов создает завихрения и потоки
+                    const angle = Math.sin(scaledX + t) + Math.cos(scaledY + t) + Math.sin(scaledX * scaledY + t*0.5);
+                    
+                    // Возвращаем вектор (dx, dy)
+                    return {
+                        x: Math.cos(angle),
+                        y: Math.sin(angle)
+                    };
+                }
+
+                update() {
+                    this.time += 0.01;
+
+                    this.particles.forEach(p => {
+                        // 1. Получаем вектор из поля в текущей позиции
+                        const vector = this.getVector(p.x, p.y);
+
+                        // 2. Применяем вектор как силу (ускорение)
+                        p.vx += vector.x * 0.5;
+                        p.vy += vector.y * 0.5;
+                        
+                        // Взаимодействие с мышью (Отталкивание)
+                        if (this.mouse.x && this.mouse.y) {
+                            const dx = p.x - this.mouse.x;
+                            const dy = p.y - this.mouse.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < this.mouse.radius) {
+                                const force = (this.mouse.radius - distance) / this.mouse.radius;
+                                p.vx += (dx / distance) * force * 2;
+                                p.vy += (dy / distance) * force * 2;
+                            }
+                        }
+
+                        // 3. Ограничиваем скорость
+                        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                        if (speed > p.maxSpeed) {
+                            p.vx = (p.vx / speed) * p.maxSpeed;
+                            p.vy = (p.vy / speed) * p.maxSpeed;
+                        }
+
+                        // 4. Обновляем позицию
+                        p.x += p.vx;
+                        p.y += p.vy;
+
+                        // 5. Обработка границ (Телепортация на противоположную сторону)
+                        if (p.x < 0) p.x = this.width;
+                        if (p.x > this.width) p.x = 0;
+                        if (p.y < 0) p.y = this.height;
+                        if (p.y > this.height) p.y = 0;
+                        
+                        // Анимация цвета
+                        p.hue = (p.hue + 0.5) % 360;
+                    });
+                }
+
+                draw() {
+                    // Используем эффект затухания следа (Motion Blur) для плавности
+                    // Рисуем полупрозрачный прямоугольник цвета фона поверх предыдущего кадра
+                    
+                    // Определяем цвет фона (для темной/светлой темы)
+                    const bgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg-color').trim();
+                    // Конвертируем HEX в RGBA для использования с прозрачностью
+                    let r, g, b;
+                    
+                    // Упрощенный парсинг для стандартных цветов #111111 и #fdfdfd
+                    if (bgColor === '#111111') {
+                        r = 17; g = 17; b = 17;
+                    } else {
+                        r = 253; g = 253; b = 253;
+                    }
+                    
+                    // Низкая прозрачность (0.1) создает длинные следы
+                    this.ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.1)`;
+                    this.ctx.fillRect(0, 0, this.width, this.height);
+
+                    // Отрисовка частиц
+                    // Оптимизация: Рисуем точки (fillRect) вместо дуг (arc)
+                    this.particles.forEach(p => {
+                        this.ctx.fillStyle = `hsl(${p.hue}, 100%, 50%)`;
+                        this.ctx.fillRect(p.x, p.y, 1.5, 1.5);
+                    });
+                }
+
+                animate() {
+                    if (!this.isActive) return;
+                    this.update();
+                    this.draw();
+                    this.animationFrameId = requestAnimationFrame(() => this.animate());
+                }
+                
+                start() {
+                    if (!this.isActive) {
+                        this.isActive = true;
+                        this.animate();
+                    }
+                }
+
+                stop() {
+                    if (this.isActive) {
+                        this.isActive = false;
+                        if (this.animationFrameId) {
+                            cancelAnimationFrame(this.animationFrameId);
+                            this.animationFrameId = null;
+                        }
+                    }
+                }
+            }
+
+            // Инициализация визуализации
+            new VectorFieldVisualization('vectorFieldCanvas');
+        });
+    </script>
+</body>
+</html>
